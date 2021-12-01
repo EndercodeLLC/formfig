@@ -86,3 +86,28 @@ Controllers should simply be classes you use for your business logic.
 Utility class should have all db, messaging, and publishing helper functions.
 
 Have this use a .env file, and make a .example.env.
+
+---
+
+The left-menu and breadcrumb trail are generated from folder structure.
+
+cms/pages/<name>.toml
+cms/pages/polls/basic_info.toml
+
+A "page" corresponds to a page in the CMS. It can have one or more forms.
+
+You can optionally specify that a page is "hidden" in left-menu.
+You can define a page as the "default" page for a folder. Otherwise default is alphabetical order.
+
+forms/<name>.toml
+forms/<foldername>/<name>.toml
+
+Forms can be defined inside the menu config, or reference a separate form config file.
+
+There is only one submit button per form.
+
+All forms are click-to-save. No immediate ajax updating. Unless you set form type to "immediate". They are all-or-nothing in that regard.
+
+Pages can combine elements into one form. Pages can have more than one form. Pages can specify certain form elements be added / removed from an imported form.
+
+There should be a sitenav.toml somewhere that defines parts of the CMS unique to every page. Think top-nav.
