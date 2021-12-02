@@ -59,9 +59,9 @@ replicate exactly what's available with mysql/mariadb. Relationships can be simp
 defined by many-to-whatever.
 
 Migrations files MUST only concern one table, other than references to other
-tables it has relationships with. They must be named "(table_name)-y-m-d-h-m-s.toml.
+tables it has relationships with. They must be named "/migrations/(table_name)-y-m-d-h-m-s.toml" or if the first one for the table, "/migrations/(table_name)-first.toml".
 
-"(table_name).toml" is built with the "formfig cms" command, and includes all
+"/migrations/full/(table_name).toml" is built with the "formfig cms" command, and includes all
 up-to-date info on table structure as defined by previous migrations. If you were
 to delete all your (table_name) migrations, and create a new one with the contents
 of this file, it would simply work (well, it would delete and remake the table).
@@ -152,4 +152,6 @@ type = "primary" # Can be "primary", "key", "unique", "fulltext", "spatial"
 algo = "btree" # Can be "", "btree, "hash", "rtree"
 fields = ["name_of_field", "name_of_another_field"]
 ```
+
+### Pages toml config
 
