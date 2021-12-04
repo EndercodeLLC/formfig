@@ -21,6 +21,8 @@ class Migrations {
 
         $migration_paths = [];
 
+        // Don't do any migrations that aren't formatted correctly... either as "first" or a proper date.
+
         foreach($file_paths as $file_path) {
 
             if( is_file($file_path) ) {
