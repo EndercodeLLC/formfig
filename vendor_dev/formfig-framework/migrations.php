@@ -2,11 +2,20 @@
 
 namespace Formfig\Framework;
 
+use DateTime;
+
 class Migrations {
 
     public static function run() {
 
         $now = time();
+
+        // Testing timezone. Make sure to subtract (24*60*60) from file's timezone offset.
+        //$tz = timezone_open("America/Indianapolis");
+        $date = new DateTime();
+        $tz = $date->getTimezone();
+        $dateTime = date_create("now",$tz);
+        echo timezone_offset_get($tz,$dateTime) + (24*60*60);
 
         $file_paths = glob($_SERVER["DOCUMENT_ROOT"].'/../migrations/*.toml');
 
