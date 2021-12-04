@@ -9,5 +9,6 @@ datatype = "text"
 nullable = true
 default  = "null"
 
+
 [email_verified_at]
 nullable = true
