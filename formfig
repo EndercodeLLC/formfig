@@ -1,0 +1,49 @@
+<?php
+
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
+require_once __DIR__.'/framework/migrations.php';
+
+// Formfig CLI
+
+if( $argc <= 1 ) { exit("Not enough arguements: Try \"php formfig help\""); }
+
+switch($argv[1]) {
+
+    case "make":
+
+        if( $argc <= 2 ) { exit("\"php formfig make\" requires another arguement: Try \"php formfig help\""); }
+
+        switch($argv[2]) {
+
+            case "migration":
+
+                if( $argc <= 3 ) { exit("\"php formfig make migration\" requires another arguement <table_name>: Try \"php formfig help\""); }
+
+                echo Formfig\Framework\Migrations::make($argv[3]);
+
+                break;
+
+            default:
+
+                exit("\"".$argv[2]."\" is not a valid arguement: Try \"php formfig help\"");
+        }
+
+        break;
+
+    case "help":
+
+        echo
+"
+The following commands can be used:
+
+php formfig make migration <table name>
+- Makes a migration file with the given table name
+";
+        break;
+
+    default:
+
+        exit("\"".$argv[1]."\" is not a valid arguement: Try \"php formfig help\"");
+}

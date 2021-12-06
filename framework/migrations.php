@@ -8,6 +8,32 @@ use Yosymfony\Toml\Toml;
 
 class Migrations {
 
+    public static function make($table_name):string {
+
+        // Make sure this checks for any migrations with that table name existing. If there is one, just use "first" instead of datetime in filename.
+
+        $date = new DateTime();
+        $tz = $date->getTimezone();
+        $dateTime = date_create("now",$tz);
+        $tz_offset =  timezone_offset_get($tz,$dateTime) + (24*60*60);
+
+        $file_name = $table_name.$dateTime->format("-Y-m-d-H-i-s-").$tz_offset.".toml";
+
+        $content =
+
+"[id]
+shortcut = \"id\"
+";
+
+        $file_loc = __DIR__."/../migrations/".$file_name;
+
+        if( file_put_contents($file_loc, $content) === false ) {
+            return "Error writing migration file.";
+        }
+
+        return "Successfully wrote migration file.";
+    }
+
     public static function run() {
 
         $now = time();
@@ -19,7 +45,7 @@ class Migrations {
         $dateTime = date_create("now",$tz);
         echo timezone_offset_get($tz,$dateTime) + (24*60*60);*/
 
-        $file_paths = glob($_SERVER["DOCUMENT_ROOT"].'/../migrations/*.toml');
+        $file_paths = glob(__DIR__.'/../migrations/*.toml');
 
         $migration_paths = [];
 
@@ -40,10 +66,10 @@ class Migrations {
 
                 $table_name = str_replace("-first.toml", "", $file_name);
 
-                if( is_file($_SERVER["DOCUMENT_ROOT"].'/../local-data/migrations.toml') ) {
+                if( is_file(__DIR__.'/../local-data/migrations.toml') ) {
 
                     // Read from local-data/migrations.toml to see if there's an entry for this table_name
-                    $md = Toml::ParseFile($_SERVER["DOCUMENT_ROOT"].'/../local-data/migrations.toml');
+                    $md = Toml::ParseFile(__DIR__.'/../local-data/migrations.toml');
 
                     if( isset($md[$table_name]) && !empty($md[$table_name]) ) {
                         continue; // Migration was run at least once on this table, so don't add 'first'
@@ -68,7 +94,7 @@ class Migrations {
                 $table_name = str_replace("-".$parts[$l-6]."-".$parts[$l-5]."-".$parts[$l-4]."-".$parts[$l-3]."-".$parts[$l-2]."-".$parts[$l-1]."-".$parts[$l], "", $file_name);
 
                 // Read from local-data/migrations.toml to see if there's an entry for this table_name
-                $md = Toml::ParseFile($_SERVER["DOCUMENT_ROOT"].'/../local-data/migrations.toml');
+                $md = Toml::ParseFile(__DIR__.'/../local-data/migrations.toml');
                 $last_migration_ts = 0;
                 if( isset($md[$table_name]) && !empty($md[$table_name]) ) {
                     $last_migration_ts = $md[$table_name];
