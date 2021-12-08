@@ -10,7 +10,7 @@ class Migrations {
 
     public static function make($table_name):string {
 
-        // Make sure this checks for any migrations with that table name existing. If there is one, just use "first" instead of datetime in filename.
+        //TASK: Make sure this checks for any migrations with that table name existing. If there is one, just use "first" instead of datetime in filename.
 
         $date = new DateTime();
         $tz = $date->getTimezone();
@@ -34,16 +34,9 @@ shortcut = \"id\"
         return "Successfully wrote migration file.";
     }
 
-    public static function run() {
+    public static function run():string {
 
         $now = time();
-
-        // Testing timezone. Make sure to subtract (24*60*60) from file's timezone offset.
-        //$tz = timezone_open("America/Indianapolis");
-        /*$date = new DateTime();
-        $tz = $date->getTimezone();
-        $dateTime = date_create("now",$tz);
-        echo timezone_offset_get($tz,$dateTime) + (24*60*60);*/
 
         $file_paths = glob(__DIR__.'/../migrations/*.toml');
 
@@ -110,6 +103,8 @@ shortcut = \"id\"
             ];
         }
 
-        echo '<pre>';print_r($migration_paths);echo '</pre>';
+        //TASK: Now that we know what migrations we should run, sort them by timestamp, then run them in order from oldest to newest.
+
+        return print_r($migration_paths, true);
     }
 }

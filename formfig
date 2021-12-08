@@ -3,23 +3,24 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
+require_once __DIR__.'/vendor/autoload.php';
 require_once __DIR__.'/framework/migrations.php';
 
 // Formfig CLI
 
-if( $argc <= 1 ) { exit("Not enough arguements: Try \"php formfig help\""); }
+if( $argc <= 1 ) { exit("Not enough parameters: Try \"php formfig help\""); }
 
 switch($argv[1]) {
 
     case "make":
 
-        if( $argc <= 2 ) { exit("\"php formfig make\" requires another arguement: Try \"php formfig help\""); }
+        if( $argc <= 2 ) { exit("\"php formfig make\" requires another parameter: Try \"php formfig help\""); }
 
         switch($argv[2]) {
 
             case "migration":
 
-                if( $argc <= 3 ) { exit("\"php formfig make migration\" requires another arguement <table_name>: Try \"php formfig help\""); }
+                if( $argc <= 3 ) { exit("\"php formfig make migration\" requires another parameter <table_name>: Try \"php formfig help\""); }
 
                 echo Formfig\Framework\Migrations::make($argv[3]);
 
@@ -27,7 +28,26 @@ switch($argv[1]) {
 
             default:
 
-                exit("\"".$argv[2]."\" is not a valid arguement: Try \"php formfig help\"");
+                exit("\"".$argv[2]."\" is not a valid parameter: Try \"php formfig help\"");
+        }
+
+        break;
+
+    case "run":
+
+        if( $argc <= 2 ) { exit("\"php formfig run\" requires another parameter: Try \"php formfig help\""); }
+
+        switch($argv[2]) {
+
+            case "migrations":
+
+                echo Formfig\Framework\Migrations::run();
+
+                break;
+
+            default:
+
+                exit("\"".$argv[2]."\" is not a valid parameter: Try \"php formfig help\"");
         }
 
         break;
@@ -45,5 +65,5 @@ php formfig make migration <table name>
 
     default:
 
-        exit("\"".$argv[1]."\" is not a valid arguement: Try \"php formfig help\"");
+        exit("\"".$argv[1]."\" is not a valid parameter: Try \"php formfig help\"");
 }
