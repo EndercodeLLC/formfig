@@ -155,3 +155,7 @@ fields = ["name_of_field", "name_of_another_field"]
 
 ### Pages toml config
 
+### More Ideas
+
+Drop the ORM and relation stuff. Raw sql isn't scary. Just have some DB function helpers.
+

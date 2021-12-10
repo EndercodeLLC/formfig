@@ -56,10 +56,15 @@ switch($argv[1]) {
 
         echo
 "
-The following commands can be used:
+---------------------------------------
+| The following commands can be used: |
+---------------------------------------
 
 php formfig make migration <table name>
 - Makes a migration file with the given table name
+
+php formfig run migrations
+- Runs all new migrations
 ";
         break;
 

@@ -8,16 +8,51 @@ use Yosymfony\Toml\Toml;
 
 class Migrations {
 
-    public static function make($table_name):string {
+    public static function make($table_to_make):string {
 
-        //TASK: Make sure this checks for any migrations with that table name existing. If there is one, just use "first" instead of datetime in filename.
+        //TASK: Make sure this checks for any migrations with that table name existing. If there are none, just use "first" instead of datetime in filename.
 
-        $date = new DateTime();
-        $tz = $date->getTimezone();
-        $dateTime = date_create("now",$tz);
-        $tz_offset =  timezone_offset_get($tz,$dateTime) + (24*60*60);
+        $file_paths = glob(__DIR__.'/../migrations/*.toml');
 
-        $file_name = $table_name.$dateTime->format("-Y-m-d-H-i-s-").$tz_offset.".toml";
+        $table_names = [];
+
+        foreach($file_paths as $file_path) {
+
+            $table_name = "";
+
+            if( !is_file($file_path) ) { continue; } // Is not a valid file page, so skip
+
+            $file_name = array_slice(explode("/", $file_path), -1)[0];
+
+            if( strpos($file_name, "-first.toml") ) {
+                $table_name = str_replace("-first.toml", "", $file_name);
+            } else {
+
+                $parts = explode("-", $file_name);
+                $l = count($parts) - 1; // Last index
+
+                if( count($parts) < 8) { continue; } // Not a valid date-based migration
+
+                $table_name = str_replace("-".$parts[$l-6]."-".$parts[$l-5]."-".$parts[$l-4]."-".$parts[$l-3]."-".$parts[$l-2]."-".$parts[$l-1]."-".$parts[$l], "", $file_name);
+            }
+
+            $table_names[] = $table_name;
+        }
+
+        if(in_array($table_to_make, $table_names)) {
+
+            $date = new DateTime();
+            $tz = $date->getTimezone();
+            $dateTime = date_create("now",$tz);
+            $tz_offset =  timezone_offset_get($tz,$dateTime) + (24*60*60);
+
+            $file_name = $table_to_make.$dateTime->format("-Y-m-d-H-i-s-").$tz_offset.".toml";
+
+        } else {
+            $file_name = $table_to_make."-first.toml";
+        }
+
+        // Create file with only an id field
 
         $content =
 
